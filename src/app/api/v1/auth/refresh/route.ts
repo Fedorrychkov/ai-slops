@@ -1,0 +1,50 @@
+import { clearAuthCookies, setAuthCookies } from '@lib/cookies'
+import { apiErrorHandlerContainer, withGlobalRateLimit } from '@lib/middleware'
+import { authService } from '@lib/services/auth.service'
+import { getRequestClientMeta } from '@lib/utils/request-client-meta'
+import { cookies } from 'next/headers'
+import { NextRequest } from 'next/server'
+
+import { getPreferredLanguageCodeFromAcceptLanguage } from '~/lib/i18n/detectLocale'
+import { getServerTFromNextRequestAsync } from '~/lib/i18n/server'
+
+const handler = (request: NextRequest) => {
+  return apiErrorHandlerContainer(request)(async (res, req) => {
+    const { t } = await getServerTFromNextRequestAsync(request)
+
+    const cookieStore = await cookies()
+    const refreshToken = cookieStore.get('refreshToken')?.value ?? null
+
+    if (!refreshToken) {
+      const response = res.json({ message: t('auth.errors.refreshTokenNotFound') }, { status: 401 })
+      clearAuthCookies(response)
+
+      return response
+    }
+
+    try {
+      const languageCode = getPreferredLanguageCodeFromAcceptLanguage(req.headers.get('accept-language'))
+      const authResponse = await authService.refreshTokens(refreshToken, { languageCode, clientMeta: getRequestClientMeta(req) })
+
+      const response = res.json(
+        {
+          success: 'Token refreshed successfully',
+          user: authResponse.user,
+        },
+        { status: 200 },
+      )
+
+      setAuthCookies(response, authResponse.accessToken, authResponse.refreshToken, authResponse.expiresIn)
+
+      return response
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to refresh token'
+      const response = res.json({ message }, { status: 401 })
+      clearAuthCookies(response)
+
+      return response
+    }
+  })
+}
+
+export const POST = withGlobalRateLimit(handler)

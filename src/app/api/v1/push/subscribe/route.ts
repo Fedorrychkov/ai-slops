@@ -1,0 +1,71 @@
+import { apiErrorHandlerContainer, withAuthMiddleware, withGlobalRateLimit } from '@lib/middleware'
+import { AuthSuccessResult } from '@lib/security/auth'
+import { pushSubscriptionService } from '@lib/services/push-subscription.service'
+import { NextRequest, NextResponse } from 'next/server'
+
+import { getServerTFromNextRequestAsync } from '~/lib/i18n/server'
+
+const handlerPost = async (request: NextRequest, authResult: AuthSuccessResult) => {
+  return apiErrorHandlerContainer(request)(async (response: typeof NextResponse) => {
+    const { t } = await getServerTFromNextRequestAsync(request)
+
+    const body = await request.json()
+    const { subscription } = body || {}
+
+    if (!subscription?.endpoint || !subscription?.keys?.p256dh || !subscription?.keys?.auth) {
+      return response.json({ ok: false, error: t('push.errors.invalidSubscription') }, { status: 400 })
+    }
+
+    const dto = {
+      endpoint: subscription.endpoint,
+      keys: {
+        p256dh: subscription.keys.p256dh,
+        auth: subscription.keys.auth,
+      },
+      userAgent: request.headers.get('user-agent') || undefined,
+    }
+
+    const user = authResult.payload
+
+    const sub = await pushSubscriptionService.subscribe(user.sub, dto)
+
+    return response.json({ ok: true, id: sub._id.toString() })
+  })
+}
+
+const handlerDelete = async (request: NextRequest, authResult: AuthSuccessResult) => {
+  return apiErrorHandlerContainer(request)(async (response: typeof NextResponse) => {
+    const { t } = await getServerTFromNextRequestAsync(request)
+
+    const body = await request.json()
+    const { endpoint } = body || {}
+
+    if (!endpoint) {
+      return response.json({ ok: false, error: t('push.errors.invalidParams') }, { status: 400 })
+    }
+
+    const user = authResult.payload
+    await pushSubscriptionService.unsubscribe(user.sub, endpoint)
+
+    return response.json({ ok: true })
+  })
+}
+
+const handlerGet = async (request: NextRequest, authResult: AuthSuccessResult) => {
+  return apiErrorHandlerContainer(request)(async (response: typeof NextResponse) => {
+    const endpoint = request.nextUrl.searchParams.get('endpoint')
+
+    if (!endpoint) {
+      return response.json({ ok: false, subscribed: false }, { status: 400 })
+    }
+
+    const user = authResult.payload
+    const sub = await pushSubscriptionService.checkSubscription(user.sub, endpoint)
+
+    return response.json({ ok: true, subscribed: !!sub })
+  })
+}
+
+export const GET = withGlobalRateLimit(withAuthMiddleware(handlerGet))
+export const POST = withGlobalRateLimit(withAuthMiddleware(handlerPost))
+export const DELETE = withGlobalRateLimit(withAuthMiddleware(handlerDelete))
