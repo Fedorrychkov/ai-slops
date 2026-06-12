@@ -22,7 +22,6 @@
     "test": "node --import tsx --test *.test.ts src/**/*.test.ts",
     "doctor": "env-cmd -f .env.local tsx scripts/doctor.ts -- .env.local",
     "doctor:prod": "env-cmd -f .env.prod tsx scripts/doctor.ts -- .env.prod",
-    "seed:games": "env-cmd -f .env.local tsx scripts/seed-games.ts",
     "prepare": "husky"
   },
   "engines": {
