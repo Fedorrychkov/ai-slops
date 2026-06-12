@@ -7,7 +7,7 @@ import { generateSecret, generateURI, verify } from 'otplib'
 import type { TFunction } from '~/lib/i18n'
 import { Logger } from '~/utils/logger'
 
-const TOTP_ISSUER = NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '') || 'nextjs-super-boilerplate'
+const TOTP_ISSUER = NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '') || 'aigames.art'
 
 const getEncryptionKey = () => {
   if (!MFA_CONFIG.encryptionKey) {

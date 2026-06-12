@@ -17,7 +17,7 @@ jobs:
   call-reusable:
     uses: ./.github/workflows/reusable-deploy-config.yml
     with:
-      domain: nextjs-super-boilerplate.visn-ai.io
+      domain: aigames.art
       api_env: prod
       env_file: .env.prod
       nginx_mode: https
@@ -26,11 +26,11 @@ jobs:
       blue_green_enabled: false
       deploy_mode: 'registry'
       node_version: 24
-      registry_subname: 'nextjs-super-boilerplate'
+      registry_subname: 'aigames'
       notify_enabled: true
-      tag: 'nextjs-super-boilerplate'
+      tag: 'aigames'
       redis_enabled: true
-      metrics_enabled: true
+      metrics_enabled: false
       mongo_enabled: true
 
     secrets:
