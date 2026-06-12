@@ -21,10 +21,13 @@ export const NotificationBlock = () => {
   const handleSubscribe = async () => {
     try {
       if (subscribed) {
-        unsubscribe()
+        await unsubscribe()
       } else {
-        subscribe()
-        unlockAudio()
+        const sub = await subscribe()
+
+        if (sub) {
+          await unlockAudio()
+        }
       }
     } catch (error) {
       logger.error('Error subscribing to notifications', error)

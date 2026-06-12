@@ -43,10 +43,15 @@ export const OnboardingModal = ({ open, onClose, state }: OnboardingModalProps) 
   const handlePushToggle = async () => {
     try {
       if (subscribed) {
-        unsubscribe()
+        await unsubscribe()
       } else {
-        subscribe()
-        unlockAudio()
+        const sub = await subscribe()
+
+        if (!sub) {
+          return
+        }
+
+        await unlockAudio()
         await completeStepMutation.mutateAsync('push')
       }
     } catch {

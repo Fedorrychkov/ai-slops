@@ -62,7 +62,8 @@ export const usePush = (params?: { publicVapidKey?: string; getUserId?: () => st
 
   const register = useCallback(async () => {
     if (!('serviceWorker' in navigator)) return null
-    const reg = await navigator.serviceWorker.register('/sw.js')
+    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
+    await navigator.serviceWorker.ready
     registrationRef.current = reg
 
     return reg
@@ -108,8 +109,11 @@ export const usePush = (params?: { publicVapidKey?: string; getUserId?: () => st
   }, [])
 
   const subscribe = useCallback(async () => {
-    if (!registrationRef.current) await register()
-    const reg = registrationRef.current!
+    const reg = registrationRef.current || (await register())
+
+    if (!reg) {
+      throw new Error('Service Worker is not supported')
+    }
 
     if (permission !== 'granted') {
       const perm = await askPermission()

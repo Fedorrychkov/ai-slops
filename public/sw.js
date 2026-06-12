@@ -1,9 +1,9 @@
 // Lightweight Service Worker for Web Push notifications + basic offline support
 
 // Bump suffix when changing caching rules so activate() drops old buckets (avoids stale/error payloads).
-const STATIC_CACHE = 'static-v3'
-const HTML_CACHE = 'html-v3'
-const API_PUBLIC_CACHE = 'api-public-v3'
+const STATIC_CACHE = 'static-v4'
+const HTML_CACHE = 'html-v4'
+const API_PUBLIC_CACHE = 'api-public-v4'
 /** 192px — iOS часто не показывает баннер с мелкой иконкой 48px */
 const APP_ICON = '/images/favicon.svg'
 
@@ -23,8 +23,8 @@ function isIOS() {
 	return /iPad|iPhone|iPod/.test(self.navigator.userAgent || '')
 }
 
-// Shell-pages, for precache (can be expanded to your project)
-const PRECACHE_URLS = ['/', APP_ICON, '/images/site.webmanifest']
+// Stable assets only — one failed URL must not block SW activation (push needs an active worker).
+const PRECACHE_URLS = [APP_ICON, '/manifest.webmanifest']
 
 self.addEventListener('push', (event) => {
 	let payload
@@ -133,7 +133,9 @@ self.addEventListener('install', (event) => {
 	self.skipWaiting()
 
 	event.waitUntil(
-		caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+		caches.open(STATIC_CACHE).then((cache) =>
+			Promise.allSettled(PRECACHE_URLS.map((url) => cache.add(url)))
+		)
 	)
 })
 
