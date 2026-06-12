@@ -124,6 +124,42 @@ export class ClientAuthApi {
     return response.data
   }
 
+  async usernameAvailable(username: string, headers?: AxiosHeaders): Promise<{ available: boolean; message?: string }> {
+    const response = await this.client.get('/api/v1/auth/username-available', { params: { username }, headers })
+
+    return response.data
+  }
+
+  async oauthPendingSignUp(
+    challengeId: string,
+    headers?: AxiosHeaders,
+  ): Promise<{
+    success: true
+    challenge: {
+      kind: 'pending_signup' | 'existing_user'
+      provider?: string
+      suggestedUsername?: string | null
+    }
+  }> {
+    const response = await this.client.get('/api/v1/auth/oauth/pending-sign-up', { params: { challenge: challengeId }, headers })
+
+    return response.data
+  }
+
+  async oauthCompleteSignUp(
+    body: { challengeId: string; username: string },
+    headers?: AxiosHeaders,
+  ): Promise<{
+    success: boolean
+    message: string
+    user?: AuthUserSnapshot
+    redirectUrl?: string
+  }> {
+    const response = await this.client.post('/api/v1/auth/oauth/complete-sign-up', body, { headers })
+
+    return response.data
+  }
+
   async getRecoveryCapabilities(): Promise<Record<string, unknown>> {
     const response = await this.client.get('/api/v1/auth/recovery/capabilities')
 

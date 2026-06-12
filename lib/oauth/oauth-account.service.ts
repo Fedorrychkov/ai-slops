@@ -85,11 +85,12 @@ export async function deleteOAuthAccountForUser(userId: string, provider: OAuthP
   return result.deletedCount > 0
 }
 
-export async function createOAuthUser(params: { email: string; languageCode?: string | null }): Promise<IUser> {
+export async function createOAuthUser(params: { email: string; username: string; languageCode?: string | null }): Promise<IUser> {
   await connectDB()
 
   return User.create({
     email: params.email.toLowerCase(),
+    username: params.username,
     role: UserRole.USER,
     status: UserStatus.ACTIVE,
     password: null,

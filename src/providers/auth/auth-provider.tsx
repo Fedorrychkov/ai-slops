@@ -13,7 +13,8 @@ import { AuthUserContext } from './useAuth'
 
 const logger = new Logger(['AuthProvider', '[src/providers/auth/auth-provider.tsx]'])
 
-const expectedRoutes = [routes.home.path, routes.login.path, routes.logout.path, routes.refresh.path, routes.uiKit.path]
+/** Skip profile fetch on auth flow pages only — public landing needs auth for header state. */
+const expectedRoutes = [routes.login.path, routes.logout.path, routes.refresh.path, routes.uiKit.path]
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isClient, setIsClient] = useState(false)

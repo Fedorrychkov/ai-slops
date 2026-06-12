@@ -1,24 +1,25 @@
 import { getServerForPublicArticlesPaginated } from '@lib/server-action/server-article'
+import { getServerForPublicGamesPaginated, getServerGameOfTheDay, getServerPublicGamesStats } from '@lib/server-action/server-game'
 import type { Metadata } from 'next'
 
-import { ArticlesPreview, FaqSection, Features, Hero, LandingFooter, QuickStart } from '~/components/Landing'
-import { LANDING_FAQ_IDS } from '~/components/Landing/landing-i18n'
+import { ArticlesPreview, FaqSection } from '~/components/Landing'
+import { GameOfTheDay, GamesPreview, HowItWorks, PlatformHero, WhySlop } from '~/components/Landing/Platform'
 import { LandingLayout } from '~/components/Layouts/LandingLayout'
 import { FALLBACK_THUMBNAIL_IMAGE } from '~/constants'
 import { getServerT } from '~/lib/i18n/server'
 import { getAlternateOgLocale, toOgLocale } from '~/lib/seo/articleLanguage'
 import { seoConfig } from '~/lib/seo/config'
-import { getFaqPageJsonLd, getOrganizationJsonLd, getPersonJsonLd, getSoftwareApplicationJsonLd, getWebSiteJsonLd, JsonLd } from '~/lib/seo/jsonld'
+import { getFaqPageJsonLd, getOrganizationJsonLd, getWebSiteJsonLd, JsonLd } from '~/lib/seo/jsonld'
 
-import { PRODUCT_CONFIG } from '../../config/product'
+const PLATFORM_FAQ_IDS = ['whatIsSlop', 'isFree', 'howToSubmit', 'isSafe', 'prompts'] as const
 
-/** List of articles from Mongo — only on request, not on `next build` */
+/** Games + articles from Mongo — only on request, not on `next build` */
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t, locale } = await getServerT()
-  const title = t('nbs.meta.title')
-  const description = t('nbs.meta.description')
+  const title = t('platform.meta.title')
+  const description = t('platform.meta.description')
   const ogLocale = toOgLocale(locale)
 
   return {
@@ -50,17 +51,18 @@ export default async function Home() {
   const { t } = await getServerT()
 
   const organizationJsonLd = getOrganizationJsonLd()
-  const personJsonLd = getPersonJsonLd()
   const webSiteJsonLd = getWebSiteJsonLd()
-  const softwareJsonLd = getSoftwareApplicationJsonLd(t('nbs.meta.description'))
-  const githubUrl = seoConfig.links.github
-  const demoUrl = seoConfig.links.demo
 
-  const articles = await getServerForPublicArticlesPaginated({ limit: 4, offset: 0 })
+  const [stats, gameOfTheDay, gamesPreview, articles] = await Promise.all([
+    getServerPublicGamesStats(),
+    getServerGameOfTheDay(),
+    getServerForPublicGamesPaginated({ limit: 8, offset: 0 }),
+    getServerForPublicArticlesPaginated({ limit: 4, offset: 0 }),
+  ])
 
-  const faqItems = LANDING_FAQ_IDS.map((id) => ({
-    question: t(`nbs.faq.items.${id}.question`),
-    answer: t(`nbs.faq.items.${id}.answer`),
+  const faqItems = PLATFORM_FAQ_IDS.map((id) => ({
+    question: t(`platform.faq.items.${id}.question`),
+    answer: t(`platform.faq.items.${id}.answer`),
   }))
 
   const faqJsonLd = getFaqPageJsonLd(faqItems)
@@ -68,18 +70,17 @@ export default async function Home() {
   return (
     <>
       <JsonLd data={organizationJsonLd} />
-      {personJsonLd ? <JsonLd data={personJsonLd} /> : null}
       <JsonLd data={webSiteJsonLd} />
-      {softwareJsonLd ? <JsonLd data={softwareJsonLd} /> : null}
       <JsonLd data={faqJsonLd} />
 
-      <LandingLayout githubUrl={githubUrl} demoUrl={demoUrl}>
-        <Hero githubUrl={githubUrl} demoUrl={demoUrl} />
-        <Features />
-        <QuickStart githubUrl={githubUrl} />
+      <LandingLayout>
+        <PlatformHero stats={stats} gameOfTheDay={gameOfTheDay} />
+        <GameOfTheDay game={gameOfTheDay} />
+        <GamesPreview games={gamesPreview?.list ?? []} />
+        <HowItWorks />
+        <WhySlop />
         <ArticlesPreview articles={articles?.list ?? []} />
         <FaqSection items={faqItems} />
-        <LandingFooter githubUrl={githubUrl} demoUrl={demoUrl} authorName={PRODUCT_CONFIG.author?.name} authorUrl={PRODUCT_CONFIG.author?.url} />
       </LandingLayout>
     </>
   )

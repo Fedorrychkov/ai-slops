@@ -8,7 +8,7 @@ import { SpinnerScreen } from '~/components/Loaders'
 import type { AppMessageKey } from '~/lib/i18n/types'
 import { useAuth, useT } from '~/providers'
 import { useNotify } from '~/providers/notify'
-import { useLoginMfaMutation, useLoginMutation, useLogoutQuery, useSignUpMutation } from '~/query/auth'
+import { useLoginMfaMutation, useLoginMutation, useLogoutQuery, useOAuthCompleteSignUpMutation, useSignUpMutation } from '~/query/auth'
 import { Logger } from '~/utils/logger'
 import { time } from '~/utils/time'
 
@@ -18,6 +18,9 @@ const SignInBlock = React.lazy(() => import('~/components/Views/Auth/Blocks/Sign
 const SignUpBlock = React.lazy(() => import('~/components/Views/Auth/Blocks/SignUpBlock').then((module) => ({ default: module.SignUpBlock })))
 const SignUpVerifyBlock = React.lazy(() => import('~/components/Views/Auth/Blocks/SignUpVerifyBlock').then((module) => ({ default: module.SignUpVerifyBlock })))
 const MfaCodeBlock = React.lazy(() => import('~/components/Views/Auth/Blocks/MfaCodeBlock').then((module) => ({ default: module.MfaCodeBlock })))
+const OAuthUsernameBlock = React.lazy(() =>
+  import('~/components/Views/Auth/Blocks/OAuthUsernameBlock').then((module) => ({ default: module.OAuthUsernameBlock })),
+)
 
 function postAuthRedirectPath(nextPath: string | null): string {
   return nextPath || '/'
@@ -31,8 +34,9 @@ const LoginWithParams = () => {
   const searchVariant = searchParams.get('variant')
   const oauthError = searchParams.get('oauthError')
   const oauthMfaChallenge = searchParams.get('oauthMfaChallenge')
+  const oauthUsernameChallenge = searchParams.get('oauthUsernameChallenge')
   const [variant, setVariant] = useState<'sign-in' | 'sign-up'>(searchVariant === 'sign-up' ? 'sign-up' : 'sign-in')
-  const [signUpStep, setSignUpStep] = useState<'credentials' | 'verify'>('credentials')
+  const [signUpStep, setSignUpStep] = useState<'credentials' | 'verify' | 'oauth-username'>('credentials')
   const [signUpEmail, setSignUpEmail] = useState('')
   const [loginStep, setLoginStep] = useState<'credentials' | 'mfa'>('credentials')
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null)
@@ -65,6 +69,15 @@ const LoginWithParams = () => {
   }, [oauthMfaChallenge])
 
   useEffect(() => {
+    if (oauthUsernameChallenge) {
+      queueMicrotask(() => {
+        setSignUpStep('oauth-username')
+        setVariant('sign-up')
+      })
+    }
+  }, [oauthUsernameChallenge])
+
+  useEffect(() => {
     if (!oauthError) return
 
     const map: Record<string, AppMessageKey> = {
@@ -80,6 +93,7 @@ const LoginWithParams = () => {
   const { loginMutation } = useLoginMutation()
   const { loginMfaMutation } = useLoginMfaMutation()
   const { signUpRequestMutation, signUpCompleteMutation } = useSignUpMutation()
+  const oauthCompleteSignUpMutation = useOAuthCompleteSignUpMutation()
 
   const handleSignIn = async (email: string, password: string) => {
     try {
@@ -149,9 +163,9 @@ const LoginWithParams = () => {
     }
   }
 
-  const handleSignUpRequest = async (email: string, password: string) => {
+  const handleSignUpRequest = async (email: string, password: string, username?: string) => {
     try {
-      const response = await signUpRequestMutation.mutateAsync({ email, password })
+      const response = await signUpRequestMutation.mutateAsync({ email, password, username })
 
       if (response.success && response.nextStep === 'logged_in' && 'user' in response) {
         await refetch?.()
@@ -191,6 +205,39 @@ const LoginWithParams = () => {
           return
         }
 
+        notify(error.response?.data?.message ?? t('auth.errors.signUpFailed'), 'warning')
+
+        return
+      }
+
+      notify(t('auth.errors.signUpFailed'), 'warning')
+    }
+  }
+
+  const handleOAuthUsernameSubmit = async (username: string) => {
+    if (!oauthUsernameChallenge) return
+
+    try {
+      const response = await oauthCompleteSignUpMutation.mutateAsync({
+        challengeId: oauthUsernameChallenge,
+        username,
+      })
+
+      if (response.redirectUrl) {
+        window.location.assign(response.redirectUrl)
+
+        return
+      }
+
+      if (response.success) {
+        await refetch?.()
+        setSignUpStep('credentials')
+        router.replace(postAuthRedirectPath(nextPath))
+      }
+    } catch (error) {
+      logger.error(error)
+
+      if (error instanceof AxiosError) {
         notify(error.response?.data?.message ?? t('auth.errors.signUpFailed'), 'warning')
 
         return
@@ -301,6 +348,16 @@ const LoginWithParams = () => {
               setSignUpStep('credentials')
               setSignUpEmail('')
             }}
+          />
+        </Suspense>
+      )}
+
+      {variant === 'sign-up' && signUpStep === 'oauth-username' && oauthUsernameChallenge && (
+        <Suspense fallback={<SpinnerScreen />}>
+          <OAuthUsernameBlock
+            challengeId={oauthUsernameChallenge}
+            isLoading={oauthCompleteSignUpMutation.isLoading || isLoading}
+            onSubmit={handleOAuthUsernameSubmit}
           />
         </Suspense>
       )}

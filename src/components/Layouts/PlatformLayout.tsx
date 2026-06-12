@@ -6,9 +6,11 @@ import {
   BellIcon,
   BotIcon,
   EyeIcon,
+  Gamepad2Icon,
   HomeIcon,
   KeyRoundIcon,
   LanguagesIcon,
+  MessageSquareIcon,
   ShieldCheckIcon,
   TextQuoteIcon,
   UserIcon,
@@ -99,6 +101,16 @@ export const PlatformLayout = ({ children }: { children: React.ReactNode }) => {
                   label: t(routes.articles.tKey),
                   icon: <TextQuoteIcon width={16} height={16} />,
                   href: routes.articles.path,
+                },
+                {
+                  label: t(routes.adminGames.tKey),
+                  icon: <Gamepad2Icon width={16} height={16} />,
+                  href: routes.adminGames.path,
+                },
+                {
+                  label: t(routes.adminGameFeedback.tKey),
+                  icon: <MessageSquareIcon width={16} height={16} />,
+                  href: routes.adminGameFeedback.path,
                 },
                 {
                   label: t(routes.adminNotifications.tKey),

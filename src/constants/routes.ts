@@ -150,6 +150,72 @@ export const routes = {
       breadcrumbOrder: 2,
     },
   },
+  gamesPublic: {
+    path: '/games',
+    name: 'Games',
+    tKey: 'navigation.gamesPublic' as const,
+    needAuth: false,
+    seo: {
+      sitemap: { priority: 0.9, changeFrequency: 'daily' },
+    },
+  },
+  gamesSubmit: {
+    path: '/games/submit',
+    name: 'Submit a game',
+    tKey: 'navigation.gamesSubmit' as const,
+    needAuth: true,
+  },
+  gamesMy: {
+    path: '/games/my',
+    name: 'My games',
+    tKey: 'navigation.gamesMy' as const,
+    needAuth: true,
+  },
+  gamesRequirements: {
+    path: '/games/requirements',
+    name: 'Platform requirements',
+    tKey: 'navigation.gamesRequirements' as const,
+    needAuth: false,
+    seo: {
+      sitemap: { priority: 0.5, changeFrequency: 'monthly' },
+    },
+  },
+  privacyPolicy: {
+    path: '/privacy',
+    name: 'Privacy Policy',
+    tKey: 'navigation.privacyPolicy' as const,
+    needAuth: false,
+    seo: {
+      sitemap: { priority: 0.3, changeFrequency: 'yearly' },
+    },
+  },
+  termsOfService: {
+    path: '/terms',
+    name: 'Terms of Service',
+    tKey: 'navigation.termsOfService' as const,
+    needAuth: false,
+    seo: {
+      sitemap: { priority: 0.3, changeFrequency: 'yearly' },
+    },
+  },
+  gamePublic: {
+    path: '/games/:slug',
+    name: 'Game',
+    tKey: 'navigation.gamePublic' as const,
+    needAuth: false,
+  },
+  adminGames: {
+    path: '/admin/games',
+    name: 'Games moderation',
+    tKey: 'navigation.adminGames' as const,
+    needAuth: true,
+  },
+  adminGameFeedback: {
+    path: '/admin/game-feedback',
+    name: 'Game feedback moderation',
+    tKey: 'navigation.adminGameFeedback' as const,
+    needAuth: true,
+  },
   articlePreview: {
     path: '/preview/:slug',
     name: 'Article Preview',

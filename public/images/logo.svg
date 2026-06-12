@@ -1,0 +1,30 @@
+<svg width="240" height="48" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="aigames.art">
+  <defs>
+    <linearGradient id="slop-gradient" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="art-gradient" x1="178" y1="12" x2="232" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon mark: gradient tile with pixel-invader glyph and a slop drip -->
+  <g>
+    <rect x="8" y="8" width="32" height="32" rx="9" fill="url(#slop-gradient)"/>
+    <rect x="17" y="16" width="3" height="3" fill="white"/>
+    <rect x="28" y="16" width="3" height="3" fill="white"/>
+    <rect x="20" y="19" width="3" height="3" fill="white" opacity="0.9"/>
+    <rect x="25" y="19" width="3" height="3" fill="white" opacity="0.9"/>
+    <rect x="17" y="22" width="14" height="3" fill="white"/>
+    <rect x="17" y="25" width="3" height="3" fill="white" opacity="0.9"/>
+    <rect x="22" y="25" width="4" height="3" fill="white"/>
+    <rect x="28" y="25" width="3" height="3" fill="white" opacity="0.9"/>
+    <rect x="22" y="28" width="4" height="5" rx="2" fill="white" opacity="0.7"/>
+  </g>
+
+  <!-- Wordmark: "aigames" + gradient ".art" -->
+  <text x="48" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" letter-spacing="-0.5" fill="#0B0B14">aigames</text>
+  <text x="138" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" letter-spacing="-0.5" fill="url(#art-gradient)">.art</text>
+</svg>

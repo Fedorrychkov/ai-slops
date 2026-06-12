@@ -85,6 +85,7 @@ export const en = {
   navigation: {
     welcomePanel: 'Welcome Panel',
     adminPanel: 'Admin Panel',
+    menu: 'Menu',
     home: 'Home',
     users: 'Users',
     uiKit: 'UI Kit',
@@ -107,6 +108,15 @@ export const en = {
     articlesPublic: 'Articles Public',
     articlePreview: 'Article Preview',
     articlePrivate: 'Article Private',
+    gamesPublic: 'Games',
+    gamePublic: 'Game',
+    gamesSubmit: 'Submit a game',
+    gamesMy: 'My games',
+    gamesRequirements: 'Platform requirements',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    adminGames: 'Games moderation',
+    adminGameFeedback: 'Game feedback',
   },
   i18n: {
     ui: {
@@ -138,175 +148,6 @@ export const en = {
       dbOnlyLocalesTitle: 'Database locales without a file bundle',
       dbOnlyLocalesBody:
         'These codes exist in the database but are not listed in SUPPORTED_LOCALES (no matching messages file wired in code): {codes}. Add a messages file and extend SUPPORTED_LOCALES if you want the admin grid to load strings from files.',
-    },
-  },
-  /** New landing page (/) — rename or drop this root to swap the whole marketing block */
-  nbs: {
-    meta: {
-      title: 'Next.js App Router starter — auth, articles, admin, deploy',
-      description:
-        'Next.js App Router boilerplate: JWT/MFA, MongoDB articles with SEO tooling, admin dashboard, UI kit, CI/CD. Fork on GitHub, try the demo, read in-repo docs.',
-    },
-    layout: {
-      navArticles: 'Articles',
-      navUiKit: 'UI Kit',
-      navGithub: 'GitHub',
-      signIn: 'Sign in',
-      liveDemo: 'Live demo',
-      getStarted: 'Get started',
-    },
-    hero: {
-      badge: 'Open source · MIT license · v0.2',
-      titleBefore: 'Ship your Next.js product',
-      titleHighlight: 'without the boilerplate',
-      titleAfter: 'headaches',
-      subtitle: 'Auth, blog, admin dashboard, SEO, push notifications, AI integrations — all wired up and production-ready. Fork it, customize',
-      subtitleConfigFile: 'config/product.ts',
-      subtitleAfter: ', deploy.',
-      ctaGithub: 'View on GitHub',
-      ctaDemo: 'Live demo →',
-      ctaAuth: 'Try auth flow',
-      tech: {
-        nextjs: 'Next.js 16',
-        typescript: 'TypeScript',
-        tailwind: 'Tailwind CSS',
-        mongodb: 'MongoDB',
-        redis: 'Redis',
-        jwtMfa: 'JWT + MFA',
-        docker: 'Docker',
-        i18n: 'i18n EN/RU',
-      },
-    },
-    features: {
-      // eslint-disable-next-line prettier/prettier
-      title: 'Everything you\'d build anyway',
-      subtitle: 'Skip the setup, focus on your product. All batteries included.',
-      items: {
-        auth: {
-          title: 'Auth & Security',
-          description: 'JWT + HttpOnly cookies, MFA (TOTP), session list with revoke, password change & forgot flow, security audit log.',
-        },
-        cms: {
-          title: 'Article CMS',
-          description: 'Rich-text editor, draft revisions, public/private posts, server-side SEO metadata, RSS feed, article views analytics.',
-        },
-        admin: {
-          title: 'Admin Dashboard',
-          description: 'User management, article moderation, push notifications panel, LLM usage tracking, i18n admin, RUM dashboard.',
-        },
-        seo: {
-          title: 'SEO & Discovery',
-          description: 'Sitemap, robots.txt, canonical URLs, JSON-LD structured data, llms.txt for AI crawlers, OpenGraph & Twitter cards.',
-        },
-        push: {
-          title: 'Push Notifications',
-          description: 'Web Push with service worker, iOS PWA hint, admin broadcast, per-user subscription management.',
-        },
-        ai: {
-          title: 'AI Integration',
-          description: 'LLM chat with streaming, content suggestions, image generation, article audit, AI referral tracking.',
-        },
-        i18n: {
-          title: 'i18n EN / RU',
-          description: 'Full bilingual support, locale-aware routing, server-side translations, i18n admin UI.',
-        },
-        deploy: {
-          title: 'Production Deploy',
-          description: 'Docker Compose, GitHub Actions CI/CD, environment profiles (local / stage / prod), Redis optional, RUM monitoring.',
-        },
-        dx: {
-          title: 'UI Kit & DX',
-          description: 'Strict TypeScript, Tailwind CSS v4, dark/light theme, shared component library, live /ui-kit route, pnpm.',
-        },
-      },
-    },
-    quickStart: {
-      title: 'Up and running in minutes',
-      subtitle: 'Four steps from zero to a working product.',
-      stepLabel: 'Step',
-      steps: {
-        fork: { title: 'Fork & clone' },
-        product: { title: 'Name your product' },
-        env: { title: 'Set env variables' },
-        run: { title: 'Run locally' },
-      },
-      code: {
-        product: 'config/product.ts  →  name, author, links',
-        env: 'cp .env.example .env.local',
-        run: 'pnpm install && pnpm dev',
-      },
-      footnoteBefore: 'Need to configure your product name, branding, or feature flags?',
-      footnoteFile: 'config/product.ts',
-      footnoteAfter: 'is the single source of truth.',
-    },
-    articles: {
-      title: 'Latest articles',
-      subtitle: 'Deep-dives, guides, and release notes from the project.',
-      viewAll: 'View all',
-      viewAllMobile: 'View all articles →',
-    },
-    faq: {
-      title: 'FAQ',
-      items: {
-        q1: {
-          question: 'Is this boilerplate free for commercial use?',
-          answer: 'Yes. It is MIT-licensed — you can use it in private and commercial projects, modify it, and redistribute it under the same license.',
-        },
-        q2: {
-          question: 'What authentication options are included?',
-          answer: 'Credential-based auth, MFA (TOTP), sessions with revoke, and protected routes. See the README for environment variables.',
-        },
-        q3: {
-          question: 'Can I deploy to Vercel, Docker, or a VPS?',
-          answer: 'Yes. The repo includes Docker-oriented docs and CI patterns; deploy anywhere Node.js runs.',
-        },
-        q4: {
-          question: 'Does it require MongoDB?',
-          answer: 'The demo uses MongoDB for users and articles. If you fork, you can replace the data layer — services keep routes thin.',
-        },
-        q5: {
-          question: 'How is this different from create-next-app?',
-          answer:
-            'create-next-app gives a minimal scaffold. This project adds auth, article CMS with SEO tooling, admin surfaces, notifications, and production defaults.',
-        },
-        q6: {
-          // eslint-disable-next-line prettier/prettier
-          question: 'Can I turn off features I don\'t need?',
-          answer:
-            'Yes — almost everything is gated behind feature flags in config/env.ts. LLM features, push notifications, email verification, RUM monitoring, and more can be disabled with a single env variable. You only run what you actually use.',
-        },
-        q7: {
-          question: 'How quickly can I go from fork to a working product?',
-          answer:
-            'With a MongoDB instance and basic env vars, the app boots in minutes. Rename the product in config/product.ts, set NEXT_PUBLIC_SITE_URL and JWT_SECRET, and you have a live auth + article platform. The Claude setup skill (/setup-nsb in Cowork) walks you through every step interactively.',
-        },
-        q8: {
-          question: 'How do I add OAuth providers (Google, GitHub, etc.)?',
-          answer:
-            'OAuth is built in (v0.2.2): enable providers in .env (AUTH_OAUTH_*_ENABLED, client id/secret), list them in AUTH_OAUTH_SIGN_IN_PROVIDERS, and run pnpm doctor. Yandex, Google, and GitHub ship out of the box. See docs/AUTH_OAUTH.md for link/unlink, MFA after OAuth sign-in, and AUTH_UI_MODE.',
-        },
-        q9: {
-          question: 'Is it good for vibe coding — building with AI assistance?',
-          answer:
-            'It was designed with that in mind. The codebase follows consistent patterns (thin routes, services, server actions) that LLMs predict well. config/product.ts is a single file for branding. The Claude setup skill can configure the whole project interactively. And llms.txt makes the repo discoverable for AI tools.',
-        },
-        q10: {
-          question: 'Does it support Telegram Mini Apps?',
-          answer:
-            'Partially. The CSS layer includes safe-area variables for Telegram viewport (--tg-safe-area-inset-*, --tg-content-safe-area-inset-*) and the theme shell adapts to them. Full Mini App mode (bot API, Telegram auth, WebApp SDK) is not wired by default but the layout groundwork is there.',
-        },
-      },
-    },
-    footer: {
-      tagline: 'Production-ready Next.js boilerplate. MIT license.',
-      navArticles: 'Articles',
-      navUiKit: 'UI Kit',
-      navDashboard: 'Dashboard',
-      navGithub: 'GitHub',
-      navDemo: 'Live demo',
-      builtBy: 'Built by',
-      authorFallback: 'the author',
-      bottomLine: 'Open source · MIT · Next.js App Router',
     },
   },
   cookie: {
@@ -367,6 +208,11 @@ export const en = {
       password_changed: 'Password changed',
       password_reset: 'Password reset',
       admin_password_set: 'Admin password set',
+      game_approved: 'Game approved',
+      game_rejected: 'Game rejected',
+      game_pending_moderation: 'Game pending moderation',
+      game_feedback_approved: 'Review approved',
+      game_feedback_rejected: 'Review rejected',
     },
     source: {
       manual_test: 'Manual test',
@@ -381,6 +227,9 @@ export const en = {
       password_change: 'Password change',
       password_forgot: 'Password reset',
       admin_password_set: 'Admin password set',
+      game_moderation: 'Game moderation',
+      game_pending_moderation: 'Game moderation queue',
+      game_feedback_moderation: 'Review moderation',
     },
     filters: {
       deliveryStatus: 'Delivery status',
@@ -432,6 +281,38 @@ export const en = {
         title: 'Password updated by support',
         body: 'An administrator set a new password for your account. Sign in and change it in your profile.',
       },
+      moderationNote: 'Moderator note: {note}',
+      gameApproved: {
+        title: 'Your game was approved',
+        body: '“{title}” is now live in the catalog.',
+      },
+      gameRejected: {
+        title: 'Your game was rejected',
+        body: '“{title}” did not pass moderation.',
+      },
+      gamePendingAdmin: {
+        title: 'New game in moderation',
+        body: '“{title}” by @{author} is waiting for review.',
+      },
+      gameFeedbackApproved: {
+        title: 'Your review was approved',
+        body: 'Your review for “{title}” is now visible on the game page.',
+      },
+      gameFeedbackRejected: {
+        title: 'Your review was rejected',
+        body: 'Your review for “{title}” did not pass moderation.',
+      },
+      gameFeedbackModeration: {
+        fallbackGameTitle: 'the game',
+      },
+    },
+  },
+  moderation: {
+    notify: {
+      sectionTitle: 'Author notification',
+      notifyAuthor: 'Notify the author',
+      moderatorNote: 'Message for the author (optional)',
+      moderatorNoteHint: 'Included in the notification body.',
     },
   },
   securityAudit: {
@@ -541,6 +422,7 @@ export const en = {
       signInWithEmail: 'Sign in with email',
       signInToContinueWorking: 'Sign in to continue working',
       email: 'Email',
+      username: 'Username',
       password: 'Password',
       signIn: 'Sign in',
       signUp: 'Sign up',
@@ -617,6 +499,10 @@ export const en = {
       signUpSendLimitReached: 'Registration code send limit reached. Please wait before trying again.',
       invalidEmailOrPassword: 'Invalid email or password',
       userAccountIsBlocked: 'User account is blocked',
+      usernameRequired: 'Enter a username',
+      usernameInvalidFormat: 'Username must be {min}–{max} characters: lowercase letters, digits or underscore, starting with a letter',
+      usernameReserved: 'This username is reserved',
+      usernameTaken: 'This username is already taken',
     },
     oauth: {
       continueWith: 'Continue with {provider}',
@@ -634,6 +520,10 @@ export const en = {
         unlinked: '{provider} disconnected.',
         passwordSet: 'Password set. You can now sign in with email and password.',
       },
+      usernameTitle: 'Choose your username',
+      usernameDescription: 'Pick a public handle to finish creating your account. You need one before you can submit games.',
+      usernameDescriptionProvider: 'Almost done with {provider} — pick a public username to finish sign-up.',
+      usernameSubmit: 'Finish sign-up',
       errors: {
         unknownProvider: 'Unknown OAuth provider.',
         invalidCallback: 'Invalid OAuth callback.',
@@ -644,6 +534,8 @@ export const en = {
         emailCollision: 'An account with this email already exists. Sign in with password and connect the provider in your profile.',
         providerTaken: 'This external account is already linked to another user.',
         providerError: 'The provider rejected the sign-in request.',
+        usernameChallengeExpired: 'This sign-up step expired. Please start OAuth sign-up again.',
+        usernameAlreadySet: 'Username is already set for this account.',
         cannotUnlinkLastMethod: 'You cannot disconnect the last sign-in method without setting a password first.',
         accountNotLinked: 'This provider is not connected.',
         passwordAlreadySet: 'Password is already set. Use change password instead.',
@@ -1441,6 +1333,8 @@ export const en = {
       image_generate: 'Image generation',
       image_prompt_stream: 'Image prompt (stream)',
       image_prompt_article: 'Image prompt (from article)',
+      game_review: 'Game AI review',
+      game_audit: 'Game security audit',
     },
     errors: {
       loadFailed: 'Failed to load usage data.',
@@ -1485,6 +1379,454 @@ export const en = {
       messages: {
         googleIndexingApiAcceptsOnlyJobPostingBroadcastEvent:
           'Google Indexing API accepts only JobPosting/BroadcastEvent; general pages are indexed via sitemap.',
+      },
+    },
+  },
+  platform: {
+    meta: {
+      title: 'aigames.art — a museum of games made entirely by AI',
+      description:
+        'People prompt Claude, GPT and Cursor into producing playable nonsense. We curate it, you play it in the browser — and the best slop rises to the top.',
+    },
+    hero: {
+      badge: 'Proudly serving artisanal AI slop',
+      titleBefore: 'A museum of games',
+      titleHighlight: 'nobody asked an AI to make',
+      titleAfter: '— but it made them anyway.',
+      subtitle:
+        'People prompt Claude, GPT and Cursor into producing playable nonsense. We curate it, you play it in the browser, the best slop rises to the top.',
+      ctaPlay: 'Play today’s exhibit',
+      ctaBrowse: 'Browse the catalog',
+      ctaSubmit: 'Submit your slop',
+      statsGames: 'exhibits',
+      statsPlays: 'plays',
+      statsPrompts: 'prompts wasted',
+    },
+    gotd: {
+      badge: 'Game of the day',
+      empty: 'The exhibit hall opens soon — the first games are in moderation.',
+    },
+    preview: {
+      title: 'Fresh from the slop mines',
+      subtitle: 'The latest approved exhibits — play them before they age like fine milk.',
+      viewAll: 'View all',
+    },
+    layout: {
+      navArticles: 'Articles',
+      signIn: 'Sign in',
+      dashboard: 'Dashboard',
+      ctaSubmit: 'Submit your slop',
+    },
+    footer: {
+      tagline: 'A museum of games made entirely by AI.',
+      copyright: 'aigames.art — proudly serving artisanal AI slop.',
+      bottomLine: 'No humans were forced to write code for these games.',
+    },
+    how: {
+      title: 'How it works',
+      subtitle: 'From a questionable prompt to museum-grade slop in three steps.',
+      stepLabel: 'Step',
+      steps: {
+        prompt: {
+          title: 'Prompt an AI into making a game',
+          description: 'Claude, GPT, v0, Cursor — any tool counts. One HTML file, zero hand-written code. The weirder the idea, the better.',
+        },
+        submit: {
+          title: 'Submit it with its pedigree',
+          description: 'Upload the file, tell us which tool made it and how many prompts it took. Bonus respect for sharing the original prompt.',
+        },
+        fame: {
+          title: 'Get played, voted and reviewed',
+          description: 'After moderation your game enters the catalog: visitors play it in the browser, upvote it, and it may become the game of the day.',
+        },
+      },
+    },
+    why: {
+      title: 'Why aigames.art',
+      subtitle: 'Other arcades hide how the sausage is made. We frame the recipe.',
+      items: {
+        pedigree: {
+          title: 'Every game has a pedigree',
+          description: 'Which AI made it, how many prompts it took, and often the original prompt itself — the part people love to inspect.',
+        },
+        sandbox: {
+          title: 'Sandboxed play',
+          description: 'Games run in an isolated iframe with no access to your cookies or data. Slop stays in its container.',
+        },
+        curated: {
+          title: 'Curated by humans',
+          description: 'Every submission passes moderation. Only certified, playable slop reaches the catalog — malware and clones do not.',
+        },
+        daily: {
+          title: 'A fresh exhibit daily',
+          description: 'The game of the day rotates every day, and the community vote decides what rises to the all-time top.',
+        },
+      },
+    },
+    articles: {
+      title: 'Notes from the museum',
+      subtitle: 'Editorials, slop reviews and dispatches from the AI gaming frontier.',
+      viewAll: 'View all',
+      viewAllMobile: 'View all articles →',
+    },
+    faq: {
+      title: 'Frequently asked questions',
+      items: {
+        whatIsSlop: {
+          question: 'What counts as an AI slop game?',
+          answer:
+            'Any browser game produced by an AI tool — Claude, GPT, v0, Cursor or similar — as a single HTML file. The less human code involved, the purer the slop. We wear the word "slop" as a medal, not an apology.',
+        },
+        isFree: {
+          question: 'Is it free to play and submit?',
+          answer: 'Completely. Playing requires no account; submitting a game only needs a free registration so we know which masterpiece is yours.',
+        },
+        howToSubmit: {
+          question: 'How do I submit my game?',
+          answer:
+            'Sign up, hit "Submit your slop", upload one HTML file and fill in the pedigree: the tool, the approximate prompt count, and ideally the original prompt. After moderation the game appears in the catalog.',
+        },
+        isSafe: {
+          question: 'Is it safe to play games made by strangers and robots?',
+          answer:
+            'Yes. Every game runs in a sandboxed iframe with no access to your cookies, storage or accounts, and every submission is reviewed by a human moderator before going live.',
+        },
+        prompts: {
+          question: 'Can I see the prompts behind a game?',
+          answer:
+            'Often, yes — authors are encouraged to attach the original prompt, and it is displayed right on the game page. It is the museum label next to the exhibit.',
+        },
+      },
+    },
+  },
+  legal: {
+    updatedLabel: 'Last updated',
+    siteLabel: 'Service',
+    privacy: {
+      title: 'Privacy Policy',
+      intro:
+        'This policy explains what personal data aigames.art collects, why we collect it, and what choices you have. It applies when you browse the catalog, create an account, submit games, or sign in through a third-party provider.',
+      updated: '12 June 2026',
+      sections: {
+        controller: {
+          title: 'Who operates the service',
+          body: 'aigames.art is a curated browser arcade of AI-generated games. The operator of the website is the entity that publishes aigames.art at the domain shown in your browser.\n\nIf you have questions about this policy, use the contact section at the end of this document.',
+        },
+        dataCollected: {
+          title: 'Data we collect',
+          body: 'Account data: when you register or sign in, we may store your email address, username, password hash (for email sign-in), profile settings, and authentication session identifiers.\n\nOAuth sign-in: if you use a third-party provider (for example VK), we receive the identifiers and basic profile fields that provider shares according to its own policy and your consent.\n\nSubmissions and activity: game files and metadata you upload, votes, play counts associated with games, moderation notes, and security audit events related to your account (such as new sign-ins).\n\nTechnical data: IP address, browser and device information, cookies required for sign-in and language preference, and basic server logs used for security and troubleshooting.\n\nOptional communications: if you enable notifications or contact us, we process the data needed to deliver those messages.',
+        },
+        purposes: {
+          title: 'How we use data',
+          body: 'We use personal data to provide the platform: authenticate users, host and moderate submitted games, display catalog pages, count plays and votes, prevent abuse, and comply with legal obligations.\n\nWe do not sell your personal data. We do not use uploaded game HTML to train third-party AI models.',
+        },
+        cookies: {
+          title: 'Cookies and similar technologies',
+          body: 'We use essential cookies for authentication sessions, CSRF protection where applicable, and remembering your language preference.\n\nYou can play public games without an account; in that case only technical cookies or storage strictly necessary for the site may be used.\n\nYou can clear cookies in your browser settings; signed-in features will stop working until you sign in again.',
+        },
+        thirdParties: {
+          title: 'Third-party services',
+          body: 'The platform may rely on infrastructure and service providers for hosting, email delivery, OAuth login, analytics, or error monitoring. Those providers process data only as needed to perform their function.\n\nGames published on aigames.art are third-party content submitted by users. They run inside a sandboxed iframe and must not access your platform account data, but their own code may use browser storage inside the sandbox according to the game author’s implementation.',
+        },
+        retention: {
+          title: 'How long we keep data',
+          body: 'We retain account data while your account is active and for a reasonable period afterward to resolve disputes, enforce terms, and meet legal requirements.\n\nSecurity logs and moderation records may be kept longer when needed to protect the service.\n\nYou may request deletion of your account subject to limits described in the Your rights section.',
+        },
+        rights: {
+          title: 'Your rights',
+          body: 'Depending on your location, you may have the right to access, correct, delete, or export personal data we hold about you, and to object to or restrict certain processing.\n\nTo exercise these rights, contact us using the details below. We may need to verify your identity before responding.\n\nIf you are in the EEA/UK, you may also lodge a complaint with your local data protection authority.',
+        },
+        children: {
+          title: 'Children',
+          body: 'The service is not directed at children under 13 (or the minimum age required in your country). We do not knowingly collect personal data from children. If you believe a child has provided us personal data, contact us and we will take appropriate steps to delete it.',
+        },
+        changes: {
+          title: 'Changes to this policy',
+          body: 'We may update this Privacy Policy from time to time. The “Last updated” date at the top will change when we do. Continued use of the service after changes means you accept the updated policy.',
+        },
+        contact: {
+          title: 'Contact',
+          body: 'For privacy questions or requests, contact the aigames.art operator through the official support or contact channel published on the website. If no dedicated address is listed, use the account recovery or profile contact options available after sign-in.',
+        },
+      },
+    },
+    terms: {
+      title: 'Terms of Service',
+      intro:
+        'These terms govern your use of aigames.art. By accessing the site, creating an account, or submitting content, you agree to these terms. If you do not agree, do not use the service.',
+      updated: '12 June 2026',
+      sections: {
+        acceptance: {
+          title: 'Acceptance',
+          body: 'These Terms of Service (“Terms”) form a binding agreement between you and the operator of aigames.art. You must be legally able to enter into a contract in your jurisdiction.\n\nWe may update these Terms. Material changes will be reflected by updating the date above. Your continued use after changes constitutes acceptance.',
+        },
+        service: {
+          title: 'The service',
+          body: 'aigames.art is a curated catalog of browser games made primarily with AI tools. Visitors can play games, vote, and read editorial content. Registered users can submit games for moderation.\n\nWe provide the platform “as is” and may change, suspend, or discontinue features at any time.',
+        },
+        accounts: {
+          title: 'Accounts and security',
+          body: 'You are responsible for your account credentials and for activity under your account. Provide accurate registration information and keep it up to date.\n\nYou must not share accounts, attempt to access other users’ accounts, or circumvent authentication or rate limits.\n\nWe may suspend or terminate accounts that violate these Terms or pose a security risk.',
+        },
+        submissions: {
+          title: 'Game submissions',
+          body: 'By submitting a game, you represent that you have the right to upload it and that it complies with our platform requirements.\n\nYou grant aigames.art a non-exclusive license to host, display, reproduce, and distribute your submitted game within the service (including embeds you explicitly allow) for as long as it remains published.\n\nYou retain ownership of your submission. Removing a game from the catalog may not erase copies already shared externally.',
+        },
+        moderation: {
+          title: 'Moderation',
+          body: 'All submissions pass human review before publication. We may reject, unpublish, or edit metadata for games that break these Terms, platform requirements, or applicable law.\n\nModeration decisions are at our discretion. We are not obligated to host any particular submission.',
+        },
+        acceptableUse: {
+          title: 'Acceptable use',
+          body: 'You must not upload malware, phishing, illegal content, hate speech, harassment, non-consensual personal data, or content that infringes intellectual property rights.\n\nYou must not attack the platform, scrape it in ways that harm performance, or use automated means to manipulate votes or play counts.\n\nGames must run as self-contained HTML suitable for sandboxed play, as described in the platform requirements.',
+        },
+        intellectualProperty: {
+          title: 'Intellectual property',
+          body: 'The aigames.art name, logo, site design, and original editorial content are owned by the operator or its licensors. You may not use our branding in a way that suggests endorsement without permission.\n\nOther trademarks and game content belong to their respective owners. Report infringement using the contact channel on the site.',
+        },
+        sandbox: {
+          title: 'Third-party games and sandbox',
+          body: 'Games are created by users and AI tools, not by aigames.art. We do not warrant that any game is safe, accurate, complete, or suitable for any purpose.\n\nGames run in a sandboxed iframe to reduce risk to your device and platform account, but you play third-party content at your own discretion.',
+        },
+        liability: {
+          title: 'Disclaimer and limitation of liability',
+          body: 'To the fullest extent permitted by law, aigames.art is provided without warranties of any kind. We are not liable for indirect, incidental, or consequential damages arising from your use of the service or any submitted game.\n\nOur total liability for any claim relating to the service is limited to the greater of (a) the amount you paid us in the twelve months before the claim or (b) zero, since the core catalog is free to use.',
+        },
+        termination: {
+          title: 'Termination',
+          body: 'You may stop using the service at any time. We may suspend or terminate access if you breach these Terms or if required by law.\n\nProvisions that by nature should survive termination (including intellectual property, disclaimers, and limitations of liability) will survive.',
+        },
+        changes: {
+          title: 'Changes',
+          body: 'We may modify these Terms. The updated date at the top indicates the latest version. Significant changes may also be announced on the site when appropriate.',
+        },
+        contact: {
+          title: 'Contact',
+          body: 'For questions about these Terms, contact the aigames.art operator through the official support or contact channel published on the website.',
+        },
+      },
+    },
+  },
+  game: {
+    ui: {
+      games: 'Games',
+      catalogTitle: 'AI slop games catalog',
+      catalogDescription: 'Browser games made entirely by AI tools — play, vote, and inspect the prompts behind them.',
+      playNow: 'Play now',
+      plays: 'plays',
+      upvote: 'Upvote',
+      madeWith: 'Made with',
+      promptsSpent: 'Prompts spent',
+      genre: 'Genre',
+      pedigree: 'Pedigree',
+      author: 'Author',
+      originalPrompt: 'The original prompt',
+      aiReview: 'AI editorial review',
+      sandboxNote: 'Runs in a sandboxed iframe — no access to your data.',
+      fullscreen: 'Fullscreen',
+      exitFullscreen: 'Exit fullscreen',
+      generateReview: 'Generate AI review',
+      regenerateReview: 'Regenerate AI review',
+      reviewGenerated: 'AI review generated',
+      fieldAllowEmbed: 'Allow embedding on other sites',
+      fieldAllowEmbedHint: 'Anyone will be able to embed your game as a widget with a link back to this page.',
+      embedTitle: 'Embed this game',
+      embedDescription:
+        'Paste this snippet into any site — the game runs in a sandboxed widget with a link back to aigames.art. Customize what the widget shows:',
+      embedShowTitle: 'Show title and author',
+      embedShowPedigree: 'Show pedigree (tool, prompts, genre)',
+      embedShowStats: 'Show votes, plays and fullscreen bar',
+      embedTheme: 'Theme',
+      embedThemeAuto: 'Auto',
+      embedThemeLight: 'Light',
+      embedThemeDark: 'Dark',
+      embedCopy: 'Copy code',
+      embedCopied: 'Copied!',
+      embedInstruction: 'Paste the code into your page HTML — that’s the whole instruction.',
+      embedAttribution: 'Played on aigames.art',
+      submitYourGame: 'Submit your game',
+      submitTitle: 'Submit your slop masterpiece',
+      submitDescription: 'One HTML file, made by an AI tool. After moderation it appears in the catalog.',
+      submitSent: 'Submitted! Your game is now in the moderation queue.',
+      fieldTitle: 'Title',
+      fieldDescription: 'Short description (one line of honesty)',
+      fieldAbout: 'About the game (public)',
+      fieldAboutHint: 'Full description shown on the game page: what it is, how to play, what to expect.',
+      fieldReviewNotes: 'Notes for the review team',
+      fieldReviewNotesHint: 'Visible to moderators only: controls, how to test, anything that speeds up the review.',
+      aboutTitle: 'About the game',
+      submitRequirementsBefore: 'Before submitting, check the',
+      submitRequirementsLink: 'platform requirements',
+      fieldTool: 'AI tool',
+      fieldToolOther: 'Tool name (if other)',
+      fieldGenre: 'Genre',
+      fieldPromptCount: 'Prompts spent (approximately)',
+      fieldPromptText: 'The original prompt (optional, highly appreciated)',
+      fieldHtmlContent: 'Game HTML (single file)',
+      fieldCoverEmoji: 'Cover emoji',
+      sortNewest: 'New',
+      sortTopAllTime: 'Top voted',
+      sortMostPlayed: 'Most played',
+      anyTool: 'Any tool',
+      anyGenre: 'Any genre',
+      emptyCatalog: 'No games yet. Be the first to submit your slop.',
+      myGames: 'My games',
+      statusPending: 'Pending review',
+      statusApproved: 'Approved',
+      statusRejected: 'Rejected',
+      moderationTitle: 'Games moderation',
+      approve: 'Approve',
+      reject: 'Reject',
+      rejectReason: 'Reject reason',
+      preview: 'Preview',
+      tools: {
+        claude: 'Claude',
+        gpt: 'GPT',
+        v0: 'v0',
+        cursor: 'Cursor',
+        other: 'Other',
+      },
+      genres: {
+        arcade: 'Arcade',
+        puzzle: 'Puzzle',
+        clicker: 'Clicker',
+        simulator: 'Simulator',
+        strategy: 'Strategy',
+        other: 'Unclassifiable',
+      },
+    },
+    errors: {
+      couldNotLoadGames: 'Could not load games',
+      notFound: 'Game not found',
+      idRequired: 'Game id is required',
+      slugRequired: 'Game slug is required',
+      invalidGameId: 'Invalid game id',
+      titleLength: 'Title must be {min}–{max} characters',
+      descriptionTooLong: 'Description must be at most {max} characters',
+      invalidTool: 'Choose a valid AI tool',
+      invalidGenre: 'Choose a valid genre',
+      htmlContentRequired: 'Game HTML is required',
+      htmlContentTooLarge: 'Game HTML must be at most {maxKb} KB',
+      invalidPromptCount: 'Prompt count must be a non-negative number',
+      promptTextTooLong: 'Prompt text must be at most {max} characters',
+      invalidCoverEmoji: 'Cover emoji is too long',
+      invalidModerationStatus: 'Moderation status must be approved or rejected',
+      submitFailed: 'Could not submit the game, please check the form and try again',
+      voteFailed: 'Could not record your vote, please try again',
+      reviewOnlyForApproved: 'AI review can only be generated for approved games',
+      reviewGenerationFailed: 'Could not generate the AI review, please try again',
+      aboutTooLong: 'About text must be at most {max} characters',
+      reviewNotesTooLong: 'Review notes must be at most {max} characters',
+    },
+    requirements: {
+      title: 'Platform requirements',
+      intro: 'What the platform supports, and what your game must satisfy to pass review and stay playable. Read this once — save yourself a rejection.',
+      supportedTitle: 'What the platform supports',
+      requiredTitle: 'What we require to pass review',
+      supported: {
+        singleFile: {
+          title: 'Single HTML file',
+          description:
+            'Your whole game ships as one .html file — markup, styles and scripts inline. That is the only format we accept and the only one we need.',
+        },
+        sandbox: {
+          title: 'Sandboxed player',
+          description: 'Games run in an isolated iframe on an opaque origin. Players are safe, and your game cannot touch platform cookies or accounts.',
+        },
+        fullscreen: {
+          title: 'Fullscreen mode',
+          description:
+            'The player expands to fullscreen on Play automatically; the widget bar has a toggle too. Design for both a card-sized and a full screen.',
+        },
+        embeds: {
+          title: 'Embeds on other sites',
+          description: 'If you allow it, anyone can embed your game as a customizable widget with attribution back to your game page.',
+        },
+        pedigree: {
+          title: 'Pedigree on display',
+          description: 'The tool, the prompt count and (ideally) the original prompt are shown next to the game — that is the exhibit label visitors love.',
+        },
+      },
+      required: {
+        playable: {
+          title: 'It must actually run',
+          description: 'The game loads and is playable from the first screen without setup. Broken-on-arrival submissions are rejected.',
+        },
+        aiMade: {
+          title: 'Made by an AI tool',
+          description:
+            'The game must be produced by an AI tool (Claude, GPT, v0, Cursor or similar). Hand-polished slop is tolerated; hand-written games are off-brand.',
+        },
+        size: {
+          title: 'Up to 512 KB',
+          description: 'The HTML file must fit in 512 KB. Slop should be light.',
+        },
+        noExternal: {
+          title: 'Self-contained code',
+          description: 'No external scripts, trackers or network calls. Everything the game needs lives inside the file.',
+        },
+        noStorage: {
+          title: 'No cookies / localStorage',
+          description:
+            'The sandbox runs on an opaque origin: cookies and localStorage are unavailable. Keep state in memory — a page refresh restarts the game.',
+        },
+        content: {
+          title: 'Clean content',
+          description: 'No malware, NSFW, hate or impersonation of other people’s IP under its original name. The DMCA magnet stays unplugged.',
+        },
+        notes: {
+          title: 'Help the reviewer',
+          description: 'Fill in the review notes: controls, goal, anything non-obvious. Games that are easy to review get reviewed faster.',
+        },
+      },
+    },
+    my: {
+      empty: 'You have not submitted any games yet. The slop mines await.',
+      edit: 'Edit',
+      saved: 'Changes saved',
+      savedBackToModeration: 'Changes saved — the game was unpublished and sent back to moderation',
+      editApprovedWarning: 'This game is live in the catalog. Saving any changes will unpublish it until moderation approves the update again.',
+      replaceHtml: 'Replace game HTML (optional)',
+      replaceHtmlHint: 'Any edit to a published game removes it from the catalog until re-approved.',
+    },
+    audit: {
+      title: 'AI security audit',
+      run: 'AI audit',
+      completed: 'Security audit completed',
+      truncatedNote: 'HTML truncated for analysis',
+      risk: {
+        low: 'Low risk',
+        medium: 'Medium risk',
+        high: 'High risk',
+      },
+      browserApis: 'Browser APIs in use',
+      networkRequests: 'Network requests',
+      storageUsage: 'Storage usage attempts',
+      suspiciousPatterns: 'Suspicious patterns',
+      safeFindings: 'Safe findings',
+      recommendations: 'Check manually',
+      errors: {
+        generationFailed: 'Could not run the security audit, please try again',
+      },
+    },
+    feedback: {
+      title: 'Player feedback',
+      empty: 'No feedback yet — be the first to report how the slop tastes.',
+      yourRating: 'Your rating',
+      placeholder: 'Played it? Tell others what to expect…',
+      submit: 'Leave feedback',
+      submitted: 'Thanks! Your feedback is in the moderation queue.',
+      moderationNote: 'Feedback appears publicly after moderation.',
+      signInToLeave: 'Sign in to leave feedback',
+      moderationTitle: 'Game feedback moderation',
+      moderationEmpty: 'No feedback in this status.',
+      errors: {
+        invalidRating: 'Rating must be between {min} and {max}',
+        textLength: 'Feedback must be {min}–{max} characters',
+        invalidFeedbackId: 'Invalid feedback id',
+        notFound: 'Feedback not found',
+        idRequired: 'Feedback id is required',
+        submitFailed: 'Could not submit feedback, please try again',
       },
     },
   },

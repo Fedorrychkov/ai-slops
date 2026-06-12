@@ -4,6 +4,7 @@ export type OAuthLoginRedirectParams = {
   nextPath?: string | null
   oauthError?: string | null
   oauthMfaChallenge?: string | null
+  oauthUsernameChallenge?: string | null
   variant?: 'sign-in' | 'sign-up'
 }
 
@@ -25,6 +26,10 @@ export function buildOAuthLoginRedirect(params: OAuthLoginRedirectParams): strin
 
   if (params.oauthMfaChallenge) {
     url.searchParams.set('oauthMfaChallenge', params.oauthMfaChallenge)
+  }
+
+  if (params.oauthUsernameChallenge) {
+    url.searchParams.set('oauthUsernameChallenge', params.oauthUsernameChallenge)
   }
 
   return url.toString()

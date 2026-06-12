@@ -2,7 +2,7 @@ import { NotificationChannel } from '~/api/notification'
 
 import { EMAIL_CONFIG, NOTIFICATION_CONFIG } from './env'
 
-export type NotificationEventId = 'article' | 'mfa' | 'login' | 'password'
+export type NotificationEventId = 'article' | 'mfa' | 'login' | 'password' | 'gameModeration' | 'gamePendingAdmin' | 'gameFeedbackModeration'
 
 export type NotificationEventConfig = {
   enabled: boolean
@@ -89,6 +89,18 @@ const NOTIFICATION_EVENTS_CONFIG: Record<NotificationEventId, NotificationEventC
   password: {
     enabled: parseBoolFlag(NOTIFICATION_CONFIG.passwordEnabled, true),
     channels: parseChannelsCsv(NOTIFICATION_CONFIG.passwordChannels, [NotificationChannel.EMAIL]),
+  },
+  gameModeration: {
+    enabled: parseBoolFlag(NOTIFICATION_CONFIG.gameModerationEnabled, true),
+    channels: parseChannelsCsv(NOTIFICATION_CONFIG.gameModerationChannels, [NotificationChannel.WEB_PUSH, NotificationChannel.EMAIL]),
+  },
+  gamePendingAdmin: {
+    enabled: parseBoolFlag(NOTIFICATION_CONFIG.gamePendingAdminEnabled, true),
+    channels: parseChannelsCsv(NOTIFICATION_CONFIG.gamePendingAdminChannels, [NotificationChannel.WEB_PUSH]),
+  },
+  gameFeedbackModeration: {
+    enabled: parseBoolFlag(NOTIFICATION_CONFIG.gameFeedbackModerationEnabled, true),
+    channels: parseChannelsCsv(NOTIFICATION_CONFIG.gameFeedbackModerationChannels, [NotificationChannel.WEB_PUSH, NotificationChannel.EMAIL]),
   },
 }
 

@@ -7,6 +7,7 @@ import { generateAccessToken, generateRefreshToken, getTokenExpiration, verifyAc
 import { assertActiveAccessSession, inheritedSessionMeta, sessionMetaFromRequest } from '@lib/services/user-session.service'
 import type { RequestClientMeta } from '@lib/utils/request-client-meta'
 import { assertPasswordPolicy } from '@lib/validation/password-policy'
+import { assertUsernamePolicy, normalizeUsername } from '@lib/validation/username'
 import mongoose, { type HydratedDocument } from 'mongoose'
 
 import { AuthResponse } from '~/api/auth/model'
@@ -26,6 +27,31 @@ export class AuthService {
     }
 
     await User.updateOne({ _id: userId }, { $set: { languageCode } })
+  }
+
+  /** True when no active user already holds this handle. */
+  async isUsernameAvailable(usernameRaw: string): Promise<boolean> {
+    await connectDB()
+
+    const existing = await User.findOne({ username: normalizeUsername(usernameRaw) })
+
+    return !existing
+  }
+
+  /** Validate format + reserved list + uniqueness; returns the normalized (stored) form. */
+  private async assertUsernameFree(usernameRaw: string, t?: TFunction): Promise<string> {
+    if (t) {
+      assertUsernamePolicy(usernameRaw, t)
+    }
+
+    const username = normalizeUsername(usernameRaw)
+    const taken = await User.findOne({ username })
+
+    if (taken) {
+      throw new ValidationError(t?.('auth.errors.usernameTaken') ?? 'Username is already taken')
+    }
+
+    return username
   }
 
   /**
@@ -48,8 +74,11 @@ export class AuthService {
       assertPasswordPolicy(data.password, options.t)
     }
 
+    const username = data.username ? await this.assertUsernameFree(data.username, options?.t) : null
+
     const user = await User.create({
       email: data.email.toLowerCase(),
+      username,
       role: isAdmin ? UserRole.ADMIN : UserRole.USER,
       status: UserStatus.ACTIVE,
       password: data.password,
@@ -63,7 +92,7 @@ export class AuthService {
    * Create user after email OTP; `passwordHash` is bcrypt — must not be re-hashed (see User pre-save `$locals.skipPasswordHash`).
    */
   async registerWithVerifiedPasswordHash(
-    data: { email: string; passwordHash: string },
+    data: { email: string; passwordHash: string; username?: string | null },
     options?: { languageCode?: string | null; clientMeta?: RequestClientMeta | null; t: TFunction },
   ): Promise<AuthResponse> {
     await connectDB()
@@ -75,8 +104,15 @@ export class AuthService {
       throw new ValidationError(options?.t?.('auth.errors.userWithThisEmailAlreadyExists') ?? 'User with this email already exists')
     }
 
+    if (!data.username?.trim()) {
+      throw new ValidationError(options?.t?.('auth.errors.usernameRequired') ?? 'Enter a username')
+    }
+
+    const username = await this.assertUsernameFree(data.username, options?.t)
+
     const user = new User({
       email,
+      username,
       role: UserRole.USER,
       status: UserStatus.ACTIVE,
       password: data.passwordHash,
@@ -117,6 +153,7 @@ export class AuthService {
     return {
       id: user._id.toString(),
       email: user.email,
+      username: user.username ?? null,
       role: user.role,
       status: user.status,
     }
@@ -270,6 +307,7 @@ export class AuthService {
       user: {
         id: user._id.toString(),
         email: user.email,
+        username: user.username ?? null,
         role: user.role,
         status: user.status,
       },
@@ -318,6 +356,7 @@ export class AuthService {
       user: {
         id: user._id.toString(),
         email: user.email,
+        username: user.username ?? null,
         role: user.role,
         status: user.status,
       },

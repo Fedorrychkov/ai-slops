@@ -1,0 +1,5 @@
+export * from './GameOfTheDay'
+export * from './GamesPreview'
+export * from './HowItWorks'
+export * from './PlatformHero'
+export * from './WhySlop'

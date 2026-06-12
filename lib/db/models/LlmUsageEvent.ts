@@ -17,6 +17,10 @@ export type LlmUsageSource =
   | 'image_prompt_stream'
   /** One-shot chat prompt derived from article before `image_generate` when user picks “from article”. */
   | 'image_prompt_article'
+  /** AI editorial review generated for an approved game. */
+  | 'game_review'
+  /** AI security audit of a submitted game's HTML (moderation aid). */
+  | 'game_audit'
 
 export interface ILlmUsageEvent extends Document {
   source: LlmUsageSource
@@ -49,6 +53,8 @@ const LlmUsageEventSchema = new Schema<ILlmUsageEvent>(
         'image_generate',
         'image_prompt_stream',
         'image_prompt_article',
+        'game_review',
+        'game_audit',
       ],
       required: true,
       index: true,

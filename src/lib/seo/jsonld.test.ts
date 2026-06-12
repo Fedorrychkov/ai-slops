@@ -65,9 +65,12 @@ test('getArticleJsonLd returns Article shape with required fields and https URLs
   assert.equal(ld.isAccessibleForFree, true)
   assert.equal(ld.inLanguage, seoConfig.defaultLocale)
 
-  assert.equal((ld.author as PersonLeaf)['@type'], 'Person')
+  // `PRODUCT_CONFIG.author` is null for this product → author falls back to the Organization publisher.
+  const expectedAuthorType = seoConfig.author != null ? 'Person' : 'Organization'
+
+  assert.equal((ld.author as PersonLeaf | OrganizationLeaf)['@type'], expectedAuthorType)
   assert.equal((ld.publisher as OrganizationLeaf)['@type'], 'Organization')
-  assertAbsoluteHttpUrl((ld.author as PersonLeaf)?.url as string, 'author.url')
+  assertAbsoluteHttpUrl((ld.author as PersonLeaf | OrganizationLeaf)?.url as string, 'author.url')
   assertAbsoluteHttpUrl((ld.publisher as OrganizationLeaf)?.url as string, 'publisher.url')
 })
 

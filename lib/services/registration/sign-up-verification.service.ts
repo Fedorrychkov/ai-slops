@@ -69,6 +69,8 @@ export type PendingSignupPayload = {
   passwordHash: string
   codeHash: string
   createdAt: number
+  /** Normalized handle reserved for this pending registration (claimed at complete step). */
+  username?: string | null
 }
 
 async function getTtlSeconds(key: string): Promise<number> {
@@ -112,7 +114,10 @@ export async function assertCanSendCode(emailRaw: string, t: TFunction): Promise
   }
 }
 
-export async function requestSignupCode(params: { email: string; password: string; locale?: string }, t: TFunction): Promise<{ devCode?: string }> {
+export async function requestSignupCode(
+  params: { email: string; password: string; username?: string | null; locale?: string },
+  t: TFunction,
+): Promise<{ devCode?: string }> {
   const email = normalizeEmail(params.email)
 
   await assertCanSendCode(email, t)
@@ -125,6 +130,7 @@ export async function requestSignupCode(params: { email: string; password: strin
     passwordHash,
     codeHash,
     createdAt: Date.now(),
+    username: params.username ?? null,
   }
 
   await cacheClient.set(pendingKey(email), JSON.stringify(payload), PENDING_SIGNUP_TTL_SEC)
@@ -164,6 +170,7 @@ export async function completeSignupWithCode(
 ): Promise<{
   email: string
   passwordHash: string
+  username: string | null
 }> {
   const email = normalizeEmail(params.email)
   const code = params.code.replace(/\s/g, '')
@@ -230,7 +237,7 @@ export async function completeSignupWithCode(
   await cacheClient.del(verifyFailKey(email))
   await clearSignupThrottleKeysAfterSuccess(email)
 
-  return { email, passwordHash: pending.passwordHash }
+  return { email, passwordHash: pending.passwordHash, username: pending.username ?? null }
 }
 
 /** After successful verification, drop rate-limit / lock keys so the email can register again later without waiting on hourly counters. */

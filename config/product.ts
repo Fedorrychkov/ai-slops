@@ -23,27 +23,24 @@ export type ProductSitemapExtra = {
 }
 
 export const PRODUCT_CONFIG = {
-  name: 'Production Ready Next.js Boilerplate',
-  shortName: 'Next.js Boilerplate',
-  description: 'Production-ready Next.js starter with auth, SEO, RUM and AI referral tracking',
-  defaultTitle: 'Production Ready Next.js Boilerplate',
+  name: 'aigames.art',
+  shortName: 'aigames',
+  description: 'A curated arcade of games made entirely by AI tools — play in the browser, vote, inspect the prompts behind them',
+  defaultTitle: 'aigames.art — a museum of games made entirely by AI',
 
   /** Public author for articles / Person schema. `null` → Organization-only publisher. */
-  author: {
-    name: 'Fedor Rychkov',
-    url: 'https://github.com/Fedorrychkov',
-  } satisfies ProductAuthor,
+  author: null as ProductAuthor | null,
 
   /** Marketing / repo links (homepage, SoftwareApplication schema). */
   links: {
-    github: 'https://github.com/Fedorrychkov/nextjs-super-boilerplate',
-    demo: 'https://nextjs-super-boilerplate.visn-ai.io',
+    github: null,
+    demo: null,
   } satisfies ProductLinks,
 
   /** Which optional JSON-LD blocks to emit on the homepage. */
   schema: {
-    person: true,
-    softwareApplication: true,
+    person: false,
+    softwareApplication: false,
   },
 
   pwa: {
@@ -52,8 +49,11 @@ export const PRODUCT_CONFIG = {
     display: 'standalone' as const,
     orientation: 'portrait' as const,
     icons: [
-      { src: '/images/web-app-manifest-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-      { src: '/images/web-app-manifest-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+      { src: '/images/android-chrome-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+      { src: '/images/android-chrome-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+      { src: '/images/apple-touch-icon.png', sizes: '180x180', type: 'image/png', purpose: 'any maskable' },
+      { src: '/images/favicon-32x32.png', sizes: '32x32', type: 'image/png', purpose: 'any maskable' },
+      { src: '/images/favicon-16x16.png', sizes: '16x16', type: 'image/png', purpose: 'any maskable' },
     ],
   },
 

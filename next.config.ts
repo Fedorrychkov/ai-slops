@@ -35,26 +35,30 @@ const connectSrcDomains = [
 // Add env domains to the list
 if (apiDomain) connectSrcDomains.push(apiDomain)
 
+/** Shared CSP directives; `frame-ancestors` differs between regular pages and embeddable ones. */
+const buildCspValue = (frameAncestors: string) =>
+  [
+    'default-src \'self\'',
+    'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://mc.yandex.ru https://mc.yandex.com https://www.googletagmanager.com',
+    'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com',
+    'img-src \'self\' data: https: https://mc.yandex.ru https://mc.yandex.com https://www.google-analytics.com https://analytics.google.com',
+    'font-src \'self\' https://fonts.gstatic.com',
+    `connect-src ${connectSrcDomains.join(' ')}`,
+    'frame-src \'self\' https://mc.yandex.ru https://mc.yandex.com https://www.google.com https://accounts.google.com',
+    `frame-ancestors ${frameAncestors}`,
+    'media-src \'self\' blob: https://mc.yandex.ru https://mc.yandex.com https://ucarecdn.com',
+    'worker-src \'self\' https://mc.yandex.ru https://mc.yandex.com',
+    'child-src \'self\' https://mc.yandex.ru https://mc.yandex.com',
+    'object-src \'none\'',
+    'base-uri \'self\'',
+    'form-action \'self\'',
+    'upgrade-insecure-requests',
+  ].join('; ')
+
 const securityHeaders = [
   {
     key: 'Content-Security-Policy',
-    value: [
-      'default-src \'self\'',
-      'script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://mc.yandex.ru https://mc.yandex.com https://www.googletagmanager.com',
-      'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com',
-      'img-src \'self\' data: https: https://mc.yandex.ru https://mc.yandex.com https://www.google-analytics.com https://analytics.google.com',
-      'font-src \'self\' https://fonts.gstatic.com',
-      `connect-src ${connectSrcDomains.join(' ')}`,
-      'frame-src \'self\' https://mc.yandex.ru https://mc.yandex.com https://www.google.com https://accounts.google.com',
-      'frame-ancestors \'self\' https://web.telegram.org https://*.telegram.org',
-      'media-src \'self\' blob: https://mc.yandex.ru https://mc.yandex.com https://ucarecdn.com',
-      'worker-src \'self\' https://mc.yandex.ru https://mc.yandex.com',
-      'child-src \'self\' https://mc.yandex.ru https://mc.yandex.com',
-      'object-src \'none\'',
-      'base-uri \'self\'',
-      'form-action \'self\'',
-      'upgrade-insecure-requests',
-    ].join('; '),
+    value: buildCspValue('\'self\' https://web.telegram.org https://*.telegram.org'),
   },
   ...(process.env.NODE_ENV === 'production'
     ? [
@@ -105,6 +109,25 @@ const nextConfig = {
         // Apply to all pages
         source: '/(.*)',
         headers: securityHeaders,
+      },
+      {
+        /**
+         * Embeddable game widgets — third-party sites iframe these pages, so `frame-ancestors`
+         * must be `*` (later rules override earlier ones for the same header key).
+         * Modern browsers ignore X-Frame-Options when CSP `frame-ancestors` is present;
+         * the per-game embed permission is enforced by the page (404) and the content route.
+         */
+        source: '/embed/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: buildCspValue('*'),
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'ALLOWALL',
+          },
+        ],
       },
     ]
   },

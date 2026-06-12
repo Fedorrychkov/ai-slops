@@ -7,6 +7,8 @@ export type UserModel = {
   role: UserRole
   passwordHash?: string | null
   email: string
+  /** Public handle shown instead of email (unique, lowercase). Null for legacy/OAuth accounts until set. */
+  username?: string | null
   status: UserStatus
   languageCode?: string | null
   emailOrigin?: UserEmailOrigin | null
@@ -33,4 +35,4 @@ export enum UserRole {
 }
 
 /** Fields returned by auth login / register / profile / verify-token APIs. */
-export type AuthUserSnapshot = Pick<UserModel, 'id' | 'email' | 'role' | 'status'>
+export type AuthUserSnapshot = Pick<UserModel, 'id' | 'email' | 'username' | 'role' | 'status'>

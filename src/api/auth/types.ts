@@ -8,6 +8,8 @@ export type LoginEmailDto = {
 export type RegisterDto = {
   email: string
   password: string
+  /** Public handle; required for self-service sign-up, optional for admin/first-admin flows. */
+  username?: string | null
 }
 
 export interface RegisterByAdminDto extends RegisterDto {

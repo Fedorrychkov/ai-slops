@@ -83,6 +83,8 @@ export type LlmUsageSourceKind =
   | 'image_generate'
   | 'image_prompt_stream'
   | 'image_prompt_article'
+  | 'game_review'
+  | 'game_audit'
 
 export type SeoSuggestResult = {
   metaTitle: string | null

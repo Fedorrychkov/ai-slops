@@ -39,7 +39,7 @@ export const FaqSection = ({ items }: Props) => {
     <section className="border-b border-border/40 py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{t('nbs.faq.title')}</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{t('platform.faq.title')}</h2>
         </div>
         <div className="rounded-2xl border border-border bg-card px-6">
           {items.map((item) => (

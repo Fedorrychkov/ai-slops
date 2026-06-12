@@ -1,18 +1,23 @@
 'use client'
 
 import { getPasswordPolicyErrorMessage } from '@lib/validation/password-policy'
-import { Mail, UserRoundPlusIcon } from 'lucide-react'
+import { getUsernamePolicyErrorMessage, normalizeUsername } from '@lib/validation/username'
+import { AtSign, Mail, UserRoundPlusIcon } from 'lucide-react'
 import * as React from 'react'
 import { useState } from 'react'
 
+import { ClientAuthApi } from '~/api/auth'
 import { InputField, PasswordField } from '~/components/Fields'
 import { Button, Typography } from '~/components/ui'
 import { OAuthDivider, OAuthProviderButtons } from '~/components/Views/Auth/OAuthProviderButtons'
 import { getPublicOAuthConfig } from '~/lib/auth/oauth-public-config'
 import { useT } from '~/providers'
+import { Logger } from '~/utils/logger'
+
+const logger = new Logger(['SignUpBlock', '[src/components/Views/Auth/Blocks/SignUpBlock.tsx]'])
 
 type Props = {
-  onSubmit: (email: string, password: string) => void
+  onSubmit: (email: string, password: string, username: string) => void
   isLoading: boolean
   onChange: () => void
   nextPath?: string | null
@@ -25,11 +30,40 @@ const SignUpBlock = (props: Props) => {
   const credentialsOnly = oauthConfig.uiMode === 'credentials_only'
   const oauthOnly = oauthConfig.uiMode === 'oauth_only'
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
+  const [usernameHint, setUsernameHint] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   const validateEmail = (emailValue: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)
+  }
+
+  const handleUsernameBlur = async () => {
+    if (!username.trim()) {
+      setUsernameHint('')
+
+      return
+    }
+
+    const policyError = getUsernamePolicyErrorMessage(username, t)
+
+    if (policyError) {
+      setUsernameHint(policyError)
+
+      return
+    }
+
+    try {
+      const api = new ClientAuthApi()
+      const result = await api.usernameAvailable(normalizeUsername(username))
+
+      setUsernameHint(result.available ? '' : (result.message ?? t('auth.errors.usernameTaken')))
+    } catch (checkError) {
+      // Availability check is best-effort; the sign-up request re-validates server-side.
+      logger.error(checkError)
+      setUsernameHint('')
+    }
   }
 
   const handle = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,6 +81,14 @@ const SignUpBlock = (props: Props) => {
       return
     }
 
+    const usernameError = getUsernamePolicyErrorMessage(username, t)
+
+    if (usernameError) {
+      setError(usernameError)
+
+      return
+    }
+
     const policyError = getPasswordPolicyErrorMessage(password, t)
 
     if (policyError) {
@@ -56,7 +98,7 @@ const SignUpBlock = (props: Props) => {
     }
 
     setError('')
-    props.onSubmit(email, password)
+    props.onSubmit(email, password, normalizeUsername(username))
   }
 
   return (
@@ -97,6 +139,29 @@ const SignUpBlock = (props: Props) => {
                 }}
                 onChange={(e) => setEmail(e.target.value)}
               />
+            </div>
+            <div className="relative">
+              <InputField
+                placeholder={t('auth.ui.username')}
+                type="text"
+                name="username"
+                value={username}
+                disabled={props.isLoading}
+                additionalLeftComponent={
+                  <span className="ml-3 text-gray-400">
+                    <AtSign className="w-4 h-4" />
+                  </span>
+                }
+                classNames={{
+                  input: 'w-full pl-10 pr-3 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-200 text-sm',
+                }}
+                onChange={(e) => {
+                  setUsername(e.target.value)
+                  setUsernameHint('')
+                }}
+                onBlur={handleUsernameBlur}
+              />
+              {usernameHint && <div className="text-sm text-red-500 text-left mt-1">{usernameHint}</div>}
             </div>
             <PasswordField
               name="password"

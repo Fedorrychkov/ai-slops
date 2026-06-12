@@ -26,6 +26,11 @@ export enum PlatformNotificationType {
   PASSWORD_CHANGED = 'password_changed',
   PASSWORD_RESET = 'password_reset',
   ADMIN_PASSWORD_SET = 'admin_password_set',
+  GAME_APPROVED = 'game_approved',
+  GAME_REJECTED = 'game_rejected',
+  GAME_PENDING_MODERATION = 'game_pending_moderation',
+  GAME_FEEDBACK_APPROVED = 'game_feedback_approved',
+  GAME_FEEDBACK_REJECTED = 'game_feedback_rejected',
 }
 
 export type NotificationChannelDeliveryModel = {

@@ -22,6 +22,7 @@ const handler = async (request: NextRequest, authResult: AuthSuccessResult) => {
       {
         id: userDoc._id.toString(),
         email: userDoc.email,
+        username: userDoc.username ?? null,
         role: userDoc.role,
         status: userDoc.status,
       },

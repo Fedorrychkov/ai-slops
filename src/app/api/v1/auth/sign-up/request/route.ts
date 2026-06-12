@@ -6,6 +6,7 @@ import { getClientKey } from '@lib/security/rate-limit'
 import { authService } from '@lib/services/auth.service'
 import { requestSignupCode } from '@lib/services/registration/sign-up-verification.service'
 import { getRequestClientMeta } from '@lib/utils/request-client-meta'
+import { assertUsernamePolicy, normalizeUsername } from '@lib/validation/username'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { RegisterDto } from '~/api/auth/types'
@@ -36,6 +37,21 @@ const handler = (request: NextRequest) => {
     const password = body.password ?? ''
     const emailNorm = normalizeEmail(emailRaw)
     const adminLogin = firstAdminLoginNormalized()
+    const isFirstAdminCandidate = Boolean(adminLogin && emailNorm === adminLogin)
+
+    /** Self-service sign-up requires a public handle; first-admin env flow is exempt. */
+    let username: string | null = null
+
+    if (!isFirstAdminCandidate) {
+      assertUsernamePolicy(body.username ?? '', t)
+      username = normalizeUsername(body.username ?? '')
+
+      const available = await authService.isUsernameAvailable(username)
+
+      if (!available) {
+        return NextResponse.json({ message: t('auth.errors.usernameTaken') }, { status: 400 })
+      }
+    }
 
     /**
      * First admin (env): no email OTP — same as legacy sign-up.
@@ -48,7 +64,7 @@ const handler = (request: NextRequest) => {
     const isValidFirstAdmin = Boolean(adminLogin && emailNorm === adminLogin && password === FIRST_ADMIN_CONFIG.password)
 
     if (isValidFirstAdmin || !REGISTRATION_CONFIG.mode) {
-      const authResponse = await authService.register({ ...body, email: emailNorm }, isValidFirstAdmin, {
+      const authResponse = await authService.register({ ...body, email: emailNorm, username }, isValidFirstAdmin, {
         languageCode,
         clientMeta: getRequestClientMeta(req),
         t,
@@ -68,7 +84,7 @@ const handler = (request: NextRequest) => {
       return response
     }
 
-    const { devCode } = await requestSignupCode({ email: emailRaw, password, locale: languageCode ?? undefined }, t)
+    const { devCode } = await requestSignupCode({ email: emailRaw, password, username, locale: languageCode ?? undefined }, t)
 
     return res.json(
       {

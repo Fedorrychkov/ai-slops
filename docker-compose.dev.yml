@@ -56,7 +56,7 @@ services:
     image: mongo:7
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27026:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: "123123"
@@ -74,7 +74,7 @@ services:
     image: redis:7.2-alpine
     container_name: nextjs-redis
     ports:
-      - "6380:6379"
+      - "6386:6379"
     volumes:
       - redis_data:/data
     networks:

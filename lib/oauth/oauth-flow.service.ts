@@ -9,12 +9,14 @@ import type { RequestClientMeta } from '@lib/utils/request-client-meta'
 
 import type { AuthResponse } from '~/api/auth/model'
 import type { OAuthFlow, OAuthProviderId } from '~/api/oauth'
-import { UserStatus } from '~/api/user'
+import { UserRole, UserStatus } from '~/api/user'
 import type { TFunction } from '~/lib/i18n'
 
 import { createOAuthAccount, createOAuthUser, findOAuthAccount, type OAuthFlowContext, touchOAuthAccount } from './oauth-account.service'
 import { buildInternalOAuthEmail, findUserByEmailForCollision, logOAuthAttempt } from './oauth-collision.service'
 import { buildOAuthLoginRedirect, buildProfileRedirect } from './oauth-redirect'
+import { resolveAvailableOAuthUsername, sanitizeOAuthLoginToUsername } from './oauth-username'
+import { createOAuthUsernameChallenge } from './oauth-username-challenge.service'
 
 export type OAuthFlowResult = { kind: 'redirect'; url: string } | { kind: 'auth'; auth: AuthResponse }
 
@@ -26,7 +28,7 @@ async function userRequiresMfa(userId: string): Promise<boolean> {
   return Boolean(settings?.mfaEnabled && settings?.mfaSecret)
 }
 
-async function completeLoginForUser(
+export async function completeLoginForUser(
   userId: string,
   options: { languageCode?: string | null; clientMeta?: RequestClientMeta | null; nextPath?: string | null },
 ): Promise<OAuthFlowResult> {
@@ -36,6 +38,24 @@ async function completeLoginForUser(
 
   if (!user || user.status !== UserStatus.ACTIVE) {
     throw new ValidationError('User not found or inactive')
+  }
+
+  if (!user.username && user.role !== UserRole.ADMIN) {
+    const challengeId = await createOAuthUsernameChallenge({
+      kind: 'existing_user',
+      userId: user._id.toString(),
+      suggestedUsername: sanitizeOAuthLoginToUsername(user.email.split('@')[0] ?? '') ?? null,
+      nextPath: options.nextPath,
+    })
+
+    return {
+      kind: 'redirect',
+      url: buildOAuthLoginRedirect({
+        oauthUsernameChallenge: challengeId,
+        variant: 'sign-up',
+        nextPath: options.nextPath,
+      }),
+    }
   }
 
   if (await userRequiresMfa(userId)) {
@@ -143,7 +163,33 @@ export async function handleOAuthAuthCallback(
     }
   }
 
-  const user = await createOAuthUser({ email, languageCode: ctx.languageCode })
+  const resolvedUsername = await resolveAvailableOAuthUsername(ctx.profile)
+
+  if (!resolvedUsername) {
+    const challengeId = await createOAuthUsernameChallenge({
+      kind: 'pending_signup',
+      provider: ctx.provider,
+      flow: ctx.flow,
+      profile: ctx.profile,
+      tokens: ctx.tokens,
+      scopes: ctx.scopes,
+      email,
+      suggestedUsername: sanitizeOAuthLoginToUsername(ctx.profile.login),
+      languageCode: ctx.languageCode,
+      nextPath: ctx.nextPath,
+    })
+
+    return {
+      kind: 'redirect',
+      url: buildOAuthLoginRedirect({
+        oauthUsernameChallenge: challengeId,
+        variant: 'sign-up',
+        nextPath: ctx.nextPath,
+      }),
+    }
+  }
+
+  const user = await createOAuthUser({ email, username: resolvedUsername, languageCode: ctx.languageCode })
 
   await createOAuthAccount({
     userId: user._id.toString(),

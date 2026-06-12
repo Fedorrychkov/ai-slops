@@ -32,6 +32,10 @@ function applyUserFilterFields(q: QueryFilter<IUser>, rest: Partial<UserModel>) 
     q.email = String(rest.email).trim().toLowerCase()
   }
 
+  if (rest.username != null && String(rest.username).trim()) {
+    q.username = String(rest.username).trim().toLowerCase()
+  }
+
   if (rest.role !== undefined && rest.role !== null) {
     q.role = rest.role
   }
@@ -60,6 +64,13 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
       required: false,
       default: null,
       select: false,
+    },
+    /** Public handle (unique, lowercase); null for legacy/OAuth accounts until set. */
+    username: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
     },
     emailOrigin: {
       type: String,
@@ -98,6 +109,17 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
   },
   {
     timestamps: true,
+  },
+)
+
+// Unique only when set: legacy/OAuth users keep `username: null` without collisions.
+UserSchema.index(
+  { username: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      username: { $type: 'string', $gt: '' },
+    },
   },
 )
 

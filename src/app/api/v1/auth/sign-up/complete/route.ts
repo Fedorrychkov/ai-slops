@@ -20,7 +20,7 @@ const handler = (request: NextRequest) => {
 
     await ensureCanRegister(ip)
 
-    const { email, passwordHash } = await completeSignupWithCode(
+    const { email, passwordHash, username } = await completeSignupWithCode(
       {
         email: body.email,
         code: body.code,
@@ -28,7 +28,10 @@ const handler = (request: NextRequest) => {
       t,
     )
 
-    const authResponse = await authService.registerWithVerifiedPasswordHash({ email, passwordHash }, { languageCode, clientMeta: getRequestClientMeta(req), t })
+    const authResponse = await authService.registerWithVerifiedPasswordHash(
+      { email, passwordHash, username },
+      { languageCode, clientMeta: getRequestClientMeta(req), t },
+    )
 
     const response = res.json(
       {
