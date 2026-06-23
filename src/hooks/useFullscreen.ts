@@ -238,5 +238,6 @@ export const useFullscreen = <T extends HTMLElement>(targetRef: RefObject<T | nu
     }
   }, [])
 
-  return { isFullscreen, toggleFullscreen, enterFullscreen, exitFullscreen }
+  // eslint-disable-next-line react-hooks/refs
+  return { isFullscreen, isPseudoFullscreen: modeRef?.current === 'pseudo' ? true : false, toggleFullscreen, enterFullscreen, exitFullscreen }
 }

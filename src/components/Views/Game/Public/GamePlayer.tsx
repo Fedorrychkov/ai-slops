@@ -37,7 +37,7 @@ export function GamePlayer({ game, hideBar = false }: Props) {
   const [voted, setVoted] = useState(false)
   const playRecorded = useRef(false)
   const playerRef = useRef<HTMLDivElement>(null)
-  const { isFullscreen, toggleFullscreen } = useFullscreen(playerRef)
+  const { isFullscreen, isPseudoFullscreen, toggleFullscreen } = useFullscreen(playerRef)
 
   const contentSrc = `/api/v1/public/game/content/${game.id}`
 
@@ -84,7 +84,9 @@ export function GamePlayer({ game, hideBar = false }: Props) {
   return (
     <div
       ref={playerRef}
-      className={cn('rounded-2xl border border-border bg-card overflow-hidden', isFullscreen && 'flex h-full w-full flex-col rounded-none border-0')}
+      className={cn('rounded-2xl border border-border bg-card overflow-hidden', {
+        'flex h-full w-full flex-col rounded-none border-0': isFullscreen && !isPseudoFullscreen,
+      })}
     >
       <div className={cn('relative w-full bg-muted', isFullscreen ? 'min-h-0 flex-1' : 'aspect-[16/10]')}>
         {started ? (

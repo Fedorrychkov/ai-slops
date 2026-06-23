@@ -599,7 +599,7 @@ body {
 }
 
 /* Pseudo-fullscreen fallback when Fullscreen API is unavailable (iOS Safari, etc.) */
-body.game-pseudo-fullscreen-body-lock {
+.game-pseudo-fullscreen-body-lock {
   position: fixed;
   width: 100%;
   overflow: hidden;
