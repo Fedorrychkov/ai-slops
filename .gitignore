@@ -51,3 +51,4 @@ grafana/prometheus/data
 
 dist/
 !certificates/*
+/prototypes/*
